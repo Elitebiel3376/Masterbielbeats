@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Beats PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet"><style>
+:root{ --neon:#a020f0; }
+
+body{
+  margin:0;
+  font-family:'Orbitron',sans-serif;
+  background:black;
+  color:white;
+  overflow-x:hidden;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  padding:20px;
+  border-bottom:1px solid #222;
+}
+
+h1{ color:var(--neon); text-shadow:0 0 20px var(--neon); }
+
+nav a{ margin:0 10px; text-decoration:none; color:white; }
+
+.hero{ text-align:center; padding:100px 20px; }
+.hero h2{ font-size:50px; text-shadow:0 0 25px var(--neon); }
+
+.btn{
+  background:var(--neon);
+  border:none;
+  padding:12px 25px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 20px var(--neon);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  padding:40px;
+}
+
+.card{
+  background:#0a0a0a;
+  padding:20px;
+  border-radius:15px;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 25px var(--neon);
+}
+
+.player{ width:100%; }
+
+footer{
+  text-align:center;
+  padding:20px;
+  border-top:1px solid #222;
+}
+</style></head>
+<body><canvas id="visualizer"></canvas>
+
+<header>
+<h1>NEON BEATS</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#beats">Beats</a>
+<a href="#contato">Contato</a>
+</nav>
+</header><section class="hero">
+<h2>Dark Pop Vibes 🔥</h2>
+<p>Beats que sentem a música</p>
+<button class="btn">Explorar</button>
+</section><section id="beats" class="grid"><div class="card">
+<h3>Dark Pop Trap</h3>
+<audio controls class="player" id="audio1">
+<source src="springtrap.mp3">
+</audio>
+<button class="btn">Comprar</button>
+</div><div class="card">
+<h3>Dark Pop</h3>
+<audio controls class="player" id="audio2">
+<source src="obito.mp3">
+</audio>
+<button class="btn">Comprar</button>
+</div></section><section id="contato" style="padding:40px; text-align:center;">
+<h2>Contato</h2>
+<button class="btn" onclick="whats()">WhatsApp</button>
+</section><footer>© 2026 Neon Beats</footer><script>
+const canvas = document.getElementById('visualizer');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioCtx.createAnalyser();
+analyser.fftSize = 256;
+
+let source;
+
+function connectAudio(audio){
+  if(source) source.disconnect();
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+document.querySelectorAll('audio').forEach(audio=>{
+  audio.addEventListener('play', ()=>{
+    audioCtx.resume();
+    connectAudio(audio);
+  });
+});
+
+let bufferLength = analyser.frequencyBinCount;
+let dataArray = new Uint8Array(bufferLength);
+
+function draw(){
+  requestAnimationFrame(draw);
+  analyser.getByteFrequencyData(dataArray);
+
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  let barWidth = (canvas.width / bufferLength) * 2.5;
+  let x = 0;
+
+  for(let i=0;i<bufferLength;i++){
+    let barHeight = dataArray[i];
+
+    ctx.fillStyle = `rgba(160,32,240,${barHeight/255})`;
+    ctx.fillRect(x, canvas.height - barHeight*1.5, barWidth, barHeight);
+
+    x += barWidth + 1;
+  }
+}
+
+draw();
+
+function whats(){
+  window.open("https://wa.me/SEUNUMERO");
+}
+</script></body>
+</html>
