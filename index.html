@@ -90,15 +90,17 @@ footer{
 </section><section id="beats" class="grid"><div class="card">
 <h3>Dark Pop Trap</h3>
 <audio controls class="player" id="audio1">
-<source src="springtrap.mp3">
+<source src="darkpoptrap1.mp3">
 </audio>
-<button class="btn">Comprar</button>
+<button class="btn" onclick="comprar(this)">Ver no Instagram</button>
+<button class="btn" onclick="pix(this)">Pagar com Pix</button>
 </div><div class="card">
 <h3>Dark Pop</h3>
 <audio controls class="player" id="audio2">
-<source src="obito.mp3">
+<source src="darkpop1.mp3">
 </audio>
-<button class="btn">Comprar</button>
+<button class="btn" onclick="comprar(this)">Ver no Instagram</button>
+<button class="btn" onclick="pix(this)">Pagar com Pix</button>
 </div></section><section id="contato" style="padding:40px; text-align:center;">
 <h2>Contato</h2>
 <button class="btn" onclick="whats()">WhatsApp</button>
@@ -154,7 +156,45 @@ function draw(){
 draw();
 
 function whats(){
-  window.open("https://wa.me/SEUNUMERO");
+  window.open("https://www.instagram.com/masterbiel_ofc?igsh=MWR3MHlsN2NiZ3NxaA==");
+}
+
+function comprar(btn){
+  const card = btn.closest('.card');
+  const titulo = card.querySelector('h3').innerText;
+  let preco = "Preço não definido";
+
+  if(titulo.includes('Trap')) preco = "R$70";
+  if(titulo.includes('Pop') && !titulo.includes('Trap')) preco = "R$60";
+
+  let msg = `Quero esse Beat aqui: ${titulo} que está custando ${preco}`;
+
+  window.open(`https://www.instagram.com/masterbiel_ofc?igsh=MWR3MHlsN2NiZ3NxaA==`);
+}
+
+function pix(btn){
+  const card = btn.closest('.card');
+  const titulo = card.querySelector('h3').innerText;
+  let preco = "";
+
+  if(titulo.includes('Trap')) preco = "70";
+  if(titulo.includes('Pop') && !titulo.includes('Trap')) preco = "60";
+
+  const chavePix = "SUA_CHAVE_PIX_AQUI";
+
+  let msg = `Pagamento via Pix
+Beat: ${titulo}
+Valor: R$${preco}
+Chave: ${chavePix}`;
+
+  navigator.clipboard.writeText(chavePix);
+
+  alert("Chave Pix copiada! Agora envie o pagamento e confirme no WhatsApp.");
+
+  window.open(`https://www.instagram.com/masterbiel_ofc?igsh=MWR3MHlsN2NiZ3NxaA==`);
+} que está custando ${preco}`;
+
+  window.open(`https://www.instagram.com/masterbiel_ofc?igsh=MWR3MHlsN2NiZ3NxaA==`);
 }
 </script></body>
 </html>
